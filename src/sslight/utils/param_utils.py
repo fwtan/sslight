@@ -5,6 +5,13 @@ import torch
 from torch import nn
 
 
+"""
+Utility functions to deal with model parameters. 
+Mostly copy-paste from the dino repo:
+https://github.com/facebookresearch/dino/blob/main/utils.py
+"""
+
+
 def _no_grad_trunc_normal_(tensor, mean, std, a, b):
     # Cut & paste from PyTorch official master until it's in a few official releases - RW
     # Method based on https://people.sc.fsu.edu/~jburkardt/presentations/truncated_normal.pdf
@@ -47,12 +54,15 @@ def trunc_normal_(tensor, mean=0., std=1., a=-2., b=2.):
 
 
 def num_of_trainable_params(model):
+    # type: (nn.Module) -> int
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())
     num_params = sum([np.prod(p.size()) for p in model_parameters])
     return num_params
 
 
 def clip_gradients(model, clip):
+    # type: (nn.Module, float) -> List[float]
+    # clip the gradient of each parameter by a scalar 'clip'
     norms = []
     for name, p in model.named_parameters():
         if p.grad is not None:
@@ -65,6 +75,7 @@ def clip_gradients(model, clip):
 
 
 def cancel_gradients_last_layer(epoch, model, freeze_last_layer):
+    # type: (int, nn.Module, int) -> None
     if epoch >= freeze_last_layer:
         return
     for n, p in model.named_parameters():
@@ -73,6 +84,7 @@ def cancel_gradients_last_layer(epoch, model, freeze_last_layer):
 
 
 def has_batchnorms(model):
+    # type: (nn.Module) -> bool
     bn_types = (torch.nn.modules.batchnorm._BatchNorm, nn.SyncBatchNorm)
     for name, module in model.named_modules():
         if isinstance(module, bn_types):
@@ -80,61 +92,8 @@ def has_batchnorms(model):
     return False
 
 
-def sub_filter_start_end(kernel_size, sub_kernel_size):
-	center = kernel_size // 2
-	dev = sub_kernel_size // 2
-	start, end = center - dev, center + dev + 1
-	assert end - start == sub_kernel_size
-	return start, end
-
-
-def min_divisible_value(n1, v1):
-	""" make sure v1 is divisible by n1, otherwise decrease v1 """
-	if v1 >= n1:
-		return n1
-	while n1 % v1 != 0:
-		v1 -= 1
-	return v1
-
-
-def get_same_padding(kernel_size):
-	if isinstance(kernel_size, tuple):
-		assert len(kernel_size) == 2, 'invalid kernel size: %s' % kernel_size
-		p1 = get_same_padding(kernel_size[0])
-		p2 = get_same_padding(kernel_size[1])
-		return p1, p2
-	assert isinstance(kernel_size, int), 'kernel size should be either `int` or `tuple`'
-	assert kernel_size % 2 > 0, 'kernel size should be odd number'
-	return kernel_size // 2
-
-
-def gather_dw_weight(full_weight):
-    inc, _, h, w = full_weight.shape
-    index = torch.arange(start=0, end=inc, dtype=torch.long, device=full_weight.device)
-    index = torch.reshape(index, (inc, 1, 1, 1)).expand(inc, 1, h, w)
-    return torch.gather(full_weight, dim=1, index=index)
-
-
-def scatter_dw_weight(dw_weight, full_weight):
-    inc, _, h, w = dw_weight.shape
-    index = torch.arange(start=0, end=inc, dtype=torch.long, device=full_weight.device)
-    index = torch.reshape(index, (inc, 1, 1, 1)).expand(inc, 1, h, w)
-    return torch.scatter(full_weight, 1, index, dw_weight)
-
-
-def gather_group_weight(full_weight, sub_groups, channels_per_group):
-    sub_filters = torch.chunk(full_weight, sub_groups, dim=0)
-    sub_ratio = full_weight.size(1) // channels_per_group
-    filter_crops = []
-    for group_id, sub_filter in enumerate(sub_filters):
-        part_id = group_id % sub_ratio
-        start = part_id * channels_per_group
-        filter_crops.append(sub_filter[:, start:start + channels_per_group, :, :])
-    filters = torch.cat(filter_crops, dim=0)
-    return filters
-
-
 def get_params(cfg, model_list):
+    # type: (CfgNode, List[nn.Module]) -> List[Dict[str, Any]]
     regularized = []
     regularized_dw = []
     not_regularized = []
@@ -143,7 +102,7 @@ def get_params(cfg, model_list):
         for name, param in model.named_parameters():
             if not param.requires_grad:
                 continue
-            # bias, not regularized
+            # scalar terms, e.g. bias, are not regularized
             if len(param.shape) == 1:
                 not_regularized.append(param)
             # depthwise conv, not regularized in the final version (by setting cfg.SOLVER.WD_FACTOR_FOR_DW to zero)
@@ -162,3 +121,58 @@ def get_params(cfg, model_list):
             {'params': regularized_dw,  'wd_factor': cfg.SOLVER.WD_FACTOR_FOR_DW, 'lars_exclude': cfg.SOLVER.LARS_EXCLUDE_DW}, 
             {'params': not_regularized, 'wd_factor': cfg.SOLVER.WD_FACTOR_FOR_BIAS, 'lars_exclude': cfg.SOLVER.LARS_EXCLUDE_BIAS}
         ]
+
+
+
+# def sub_filter_start_end(kernel_size, sub_kernel_size):
+# 	center = kernel_size // 2
+# 	dev = sub_kernel_size // 2
+# 	start, end = center - dev, center + dev + 1
+# 	assert end - start == sub_kernel_size
+# 	return start, end
+
+
+# def min_divisible_value(n1, v1):
+# 	""" make sure v1 is divisible by n1, otherwise decrease v1 """
+# 	if v1 >= n1:
+# 		return n1
+# 	while n1 % v1 != 0:
+# 		v1 -= 1
+# 	return v1
+
+
+# def get_same_padding(kernel_size):
+# 	if isinstance(kernel_size, tuple):
+# 		assert len(kernel_size) == 2, 'invalid kernel size: %s' % kernel_size
+# 		p1 = get_same_padding(kernel_size[0])
+# 		p2 = get_same_padding(kernel_size[1])
+# 		return p1, p2
+# 	assert isinstance(kernel_size, int), 'kernel size should be either `int` or `tuple`'
+# 	assert kernel_size % 2 > 0, 'kernel size should be odd number'
+# 	return kernel_size // 2
+
+
+# def gather_dw_weight(full_weight):
+#     inc, _, h, w = full_weight.shape
+#     index = torch.arange(start=0, end=inc, dtype=torch.long, device=full_weight.device)
+#     index = torch.reshape(index, (inc, 1, 1, 1)).expand(inc, 1, h, w)
+#     return torch.gather(full_weight, dim=1, index=index)
+
+
+# def scatter_dw_weight(dw_weight, full_weight):
+#     inc, _, h, w = dw_weight.shape
+#     index = torch.arange(start=0, end=inc, dtype=torch.long, device=full_weight.device)
+#     index = torch.reshape(index, (inc, 1, 1, 1)).expand(inc, 1, h, w)
+#     return torch.scatter(full_weight, 1, index, dw_weight)
+
+
+# def gather_group_weight(full_weight, sub_groups, channels_per_group):
+#     sub_filters = torch.chunk(full_weight, sub_groups, dim=0)
+#     sub_ratio = full_weight.size(1) // channels_per_group
+#     filter_crops = []
+#     for group_id, sub_filter in enumerate(sub_filters):
+#         part_id = group_id % sub_ratio
+#         start = part_id * channels_per_group
+#         filter_crops.append(sub_filter[:, start:start + channels_per_group, :, :])
+#     filters = torch.cat(filter_crops, dim=0)
+#     return filters

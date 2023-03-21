@@ -24,6 +24,7 @@ class DINOLoss(nn.Module):
         ))
 
     def forward(self, student_output, teacher_output, epoch):
+        # type: (torch.Tensor, torch.Tensor, int) -> torch.Tensor
         student_out = student_output / self.student_temp
         student_out = student_out.chunk(self.ncrops)
 
@@ -32,6 +33,7 @@ class DINOLoss(nn.Module):
         teacher_out = nn.functional.softmax((teacher_output - self.center) / temp, dim=-1)
         teacher_out = teacher_out.detach().chunk(self.cfg.MULTI_VIEWS_TRANSFORMS.NMB_CROPS[0])
 
+        # collect the loss between global-global and global-local pairs
         g_loss, l_loss = 0.0, 0.0
         n_g_loss_terms, n_l_loss_terms = 0.0, 0.0
 
@@ -40,13 +42,17 @@ class DINOLoss(nn.Module):
                 if v == iq:
                     # skip cases where student and teacher operate on the same view
                     continue
+                # KL-divergence between teacher and student
                 loss = torch.sum(-q * nn.functional.log_softmax(student_out[v], dim=-1), dim=-1)
+                # global-global pairs
                 if iq < self.cfg.MULTI_VIEWS_TRANSFORMS.NMB_CROPS[0] and v < self.cfg.MULTI_VIEWS_TRANSFORMS.NMB_CROPS[0]:
                     g_loss += loss.mean()
                     n_g_loss_terms += 1
+                # global-local pairs
                 else:
                     l_loss += loss.mean()
                     n_l_loss_terms += 1
+        # re-weight the loss
         alpha, beta = self.cfg.MULTI_VIEWS_TRANSFORMS.LAMBDAS
         if self.cfg.DINO.GLOBAL_ONLY:
             total_loss = g_loss/n_g_loss_terms
@@ -81,6 +87,8 @@ class SWAVLoss(nn.Module):
         self.cfg = cfg
 
     def forward(self, output, bs, embedding, use_the_queue, queue, model):
+        # type: (torch.Tensor, int, torch.Tensor, bool, torch.Tensor, torch.nn.Module) -> torch.Tensor
+
         g_loss, l_loss = 0.0, 0.0
         n_g_loss_terms, n_l_loss_terms = 0.0, 0.0
 
@@ -113,15 +121,20 @@ class SWAVLoss(nn.Module):
             # cluster assignment prediction
             
             for v in np.delete(np.arange(np.sum(self.nmb_crops)), crop_id):
+                # logits
                 x = output[bs * v: bs * (v + 1)] / self.temperature
+                # KL-divergence between the assignments q and the logits x
                 loss = -torch.sum(q * nn.functional.log_softmax(x, dim=1), dim=1)
+                # global-global pairs
                 if crop_id < self.nmb_crops[0] and v < self.nmb_crops[0]:
                     g_loss += loss.mean()
                     n_g_loss_terms += 1
+                # global-local pairs
                 else:
                     l_loss += loss.mean()
                     n_l_loss_terms += 1
         
+        # re-weight the loss
         alpha, beta = self.cfg.MULTI_VIEWS_TRANSFORMS.LAMBDAS
         total_loss = alpha * g_loss/n_g_loss_terms + beta * l_loss/n_l_loss_terms
         return total_loss, queue, use_the_queue

@@ -2,6 +2,7 @@ import numpy as np
 
 
 def cosine_scheduler(base_value, final_value, epochs, niter_per_ep, warmup_epochs=0, start_warmup_value=0):
+    # type (float, float, int, int, int, float, int, float) -> np.ndarray
     warmup_schedule = np.array([])
     warmup_iters = warmup_epochs * niter_per_ep
     if warmup_epochs > 0:
@@ -16,6 +17,7 @@ def cosine_scheduler(base_value, final_value, epochs, niter_per_ep, warmup_epoch
 
 
 def multistep_scheduler(base_value, milestones, epochs, niter_per_ep, gamma=0.1, warmup_epochs=0, start_warmup_value=0):
+    # type (float, List[int], int, int, float, int, float) -> np.ndarray
     warmup_schedule = np.array([])
     warmup_iters = warmup_epochs * niter_per_ep
     if warmup_epochs > 0:

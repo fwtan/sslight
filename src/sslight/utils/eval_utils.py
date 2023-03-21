@@ -1,6 +1,10 @@
 import torch
 import numpy as np
-from collections import deque
+
+
+'''
+Utility functions for evaluation. 
+'''
 
 
 def accuracy(output, target, topk=(1,)):
@@ -20,90 +24,68 @@ def accuracy(output, target, topk=(1,)):
         return res
 
 
-class AverageMeter():
-    """Computes and stores the average and current value"""
-    def __init__(self):
-        self.reset()
+@torch.no_grad()
+def knn_classifier(
+        train_features, train_labels, 
+        test_features, test_labels, 
+        k, T, 
+        offset=0, # if the train_features are the same as the test features, offset should be set to 1
+        num_classes=1000,
+    ):
 
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
+    # type: (torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, int, float, int, int) -> Tuple[float, float, int]
 
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / (.0001 + self.count)
+    top1, top5, total = 0.0, 0.0, 0
+    train_features = train_features.t()
+    num_test_images, num_chunks = test_labels.shape[0], 100
+    imgs_per_chunk = num_test_images // num_chunks
+    retrieval_one_hot = torch.zeros(k, num_classes).cuda()
 
-    def __str__(self):
-        if self.count == 0:
-            return str(self.val)
-
-        return f'{self.val:.4f} ({self.avg:.4f})'
-
-
-class MovingAverageMeter(object):
-    def __init__(self, window):
-        self.window = window
-        self.reset()
-
-    def reset(self):
-        self.history = deque()
-        self.avg = 0
-        self.sum = None
-        self.val = None
-
-    @property
-    def count(self):
-        return len(self.history)
-
-    @property
-    def isfull(self):
-        return len(self.history) == self.window
-
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        state['history'] = np.array(state['history'])
-        return state
-
-    def __setstate__(self, state):
-        state['history'] = deque(state['history'])
-        self.__dict__.update(state)
-
-    def update(self, val, n=1):
-        if n == 1:
-            self.update_one_sample(val)
-            return 
-
-        self.history.extend([val] * n)
-        if self.sum is None:
-            self.sum = val * n
-        else:
-            self.sum += val * n
-        while len(self.history) > self.window:
-            self.sum -= self.history.popleft()
-        self.val = val
-        self.avg = self.sum / self.count
+    ###########################################################
+    # The indices of the topk neighbors for each image
+    nn_inds = []
+    ###########################################################
     
-    def update_one_sample(self, val):
-        self.history.append(val)
-        if self.sum is None:
-            self.sum = val
-        else:
-            self.sum += val
-        if len(self.history) > self.window:
-            self.sum -= self.history.popleft()
-        self.val = val
-        self.avg = self.sum / self.count
+    for idx in range(0, num_test_images, imgs_per_chunk):
+        # get the features for test images
+        features = test_features[
+            idx : min((idx + imgs_per_chunk), num_test_images), :
+        ]
+        targets = test_labels[idx : min((idx + imgs_per_chunk), num_test_images)]
+        batch_size = targets.shape[0]
 
-    def __str__(self):
-        if self.count == 0:
-            return str(self.val)
+        # calculate the dot product and compute top-k neighbors
+        similarity = torch.mm(features, train_features)
 
-        return f'{self.val:.4f} ({self.avg:.4f})'
+        ###########################################################
+        # collect the indices of the topk neighbors
+        distances, indices = similarity.topk(k+offset, largest=True, sorted=True)
+        distances, indices = distances[:,offset:], indices[:,offset:]
+        nn_inds.append(indices.cpu().data.numpy())
+        ###########################################################
 
-    def __repr__(self):
-        return "<MovingAverageMeter of window {} with {} elements, val {}, avg {}>".format(
-            self.window, self.count, self.val, self.avg)
+        candidates = train_labels.view(1, -1).expand(batch_size, -1)
+        retrieved_neighbors = torch.gather(candidates, 1, indices)
+
+        retrieval_one_hot.resize_(batch_size * k, num_classes).zero_()
+        retrieval_one_hot.scatter_(1, retrieved_neighbors.view(-1, 1), 1)
+        distances_transform = distances.clone().div_(T).exp_()
+        probs = torch.sum(
+            torch.mul(
+                retrieval_one_hot.view(batch_size, -1, num_classes),
+                distances_transform.view(batch_size, -1, 1),
+            ),
+            1,
+        )
+        _, predictions = probs.sort(1, True)
+
+        # find the predictions that match the target
+        correct = predictions.eq(targets.data.view(-1, 1))
+        top1 = top1 + correct.narrow(1, 0, 1).sum().item()
+        top5 = top5 + correct.narrow(1, 0, 5).sum().item()
+        total += targets.size(0)
+    
+    nn_inds = np.concatenate(nn_inds, 0)
+    top1 = top1 * 100.0 / total
+    top5 = top5 * 100.0 / total
+    return top1, top5, nn_inds
