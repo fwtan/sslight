@@ -1,3 +1,7 @@
+'''
+Mostly copy-paste from https://github.com/1adrianb/pytorch-estimate-flops
+'''
+
 import re
 from functools import reduce
 from collections import defaultdict

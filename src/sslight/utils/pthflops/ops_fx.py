@@ -1,3 +1,7 @@
+'''
+Mostly copy-paste from https://github.com/1adrianb/pytorch-estimate-flops
+'''
+
 from functools import reduce
 from typing import Any, Dict, List, Tuple
 

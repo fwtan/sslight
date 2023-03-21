@@ -1,3 +1,7 @@
+'''
+Mostly copy-paste from https://github.com/1adrianb/pytorch-estimate-flops
+'''
+
 from .utils import print_table
 from .ops_jit import count_ops_jit
 try:
