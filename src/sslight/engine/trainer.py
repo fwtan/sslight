@@ -10,13 +10,12 @@ from torch.optim import SGD
 from torch.utils.tensorboard import SummaryWriter
 
 from sslight.model import *
-from sslight.utils.losses import *
-from sslight.utils import eval_util
-from sslight.utils.optimizer import LARS, LARC
+from sslight.utils.loss import *
+from sslight.utils import eval_utils
+from sslight.utils.optimizer import LARS
 from sslight.utils.scheduler import cosine_scheduler, multistep_scheduler
 from sslight.utils.param_utils import get_params, has_batchnorms
 from sslight.utils.param_utils import num_of_trainable_params
-from sslight.utils.knn_utils import knn_classifier, pickle_save
 
 from data.transforms import *
 from data.loader  import ImageDatasetLoader
@@ -244,7 +243,7 @@ class Trainer():
         self.model.eval()
         features = None
         if self.cfg.TRAIN.JOINT_LINEAR_PROBE:
-            sup_accu_meter = eval_util.AverageMeter()
+            sup_accu_meter = logging.AverageMeter()
 
         with torch.no_grad():
             for i, (index, images, labels) in tqdm(enumerate(self.val_loader), disable=(self.rank != 0)):
@@ -302,11 +301,11 @@ class Trainer():
             xs = features[:,:-1]
             ys = features[:,-1].long()
             xs = nn.functional.normalize(xs, dim=-1)
-            top1, top5, nn_inds = knn_classifier(
+            top1, top5, nn_inds = eval_utils.knn_classifier(
                 xs, ys,
                 xs, ys,
                 20, 0.07, offset=1)
-            # pickle_save('nn_inds.pkl', nn_inds)
+            # logging.pickle_save('nn_inds.pkl', nn_inds)
             self.writer.add_scalar('knn_top1', top1, epoch)
             self.writer.add_scalar('knn_top5', top5, epoch)
 

@@ -6,7 +6,6 @@ import torch.nn as nn
 import torch.distributed as dist
 
 from sslight.engine.trainer import Trainer
-from sslight.utils import eval_util
 from sslight.utils.param_utils import clip_gradients, cancel_gradients_last_layer
 import sslight.utils.log_utils as logging
 
@@ -21,9 +20,12 @@ class DINOTrainer(Trainer):
     def train_epoch(self, epoch):
         metrics, times = {}, {}
         for t in ['io', 'forward', 'backward', 'batch']:
-            times[t] = eval_util.AverageMeter()
-        for t in ['loss', 'ssl_loss', 'sup_loss', 'sup_accu']:
-            metrics[t] = eval_util.AverageMeter()
+            times[t] = logging.AverageMeter()
+        for t in ['loss', 'ssl_loss']:
+            metrics[t] = logging.AverageMeter()
+        if self.cfg.TRAIN.JOINT_LINEAR_PROBE:
+            for t in ['sup_loss', 'sup_accu']:
+                metrics[t] = logging.AverageMeter()
         
         if self.cfg.DISTRIBUTED:
             self.data_ins.set_epoch(epoch)

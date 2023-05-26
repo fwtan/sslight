@@ -3,7 +3,7 @@ from torch import nn
 import torchvision.models as tch_models
 from copy import deepcopy
 from sslight.utils.pthflops import count_ops
-from sslight.utils.trunc_normal import trunc_normal_
+from sslight.utils.param_utils import trunc_normal_
 
 
 class BACKBONE(nn.Module):

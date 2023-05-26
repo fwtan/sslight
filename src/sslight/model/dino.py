@@ -5,7 +5,7 @@ import torchvision.models as tch_models
 from copy import deepcopy
 import sslight.backbone.vision_transformer as vits
 from sslight.backbone.layer import BACKBONE, MultiCropWrapper
-from sslight.utils.trunc_normal import trunc_normal_
+from sslight.utils.param_utils import trunc_normal_
 
 
 class DINOHead(nn.Module):
@@ -115,6 +115,7 @@ class DINO(nn.Module):
         enc_feats, student_output = self.student(images)
         # Optionally train a linear classifier on top of the detached features
         # to estimate the quality of the representation during training
+        batch_size = images[0].size(0)
         sup_logits = self.classifier(enc_feats.detach()[:batch_size].detach()) if self.classifier is not None else None
         return enc_feats, sup_logits, student_output, teacher_output
         

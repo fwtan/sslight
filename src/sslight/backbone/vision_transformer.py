@@ -2,7 +2,7 @@ import math
 from functools import partial
 import torch
 import torch.nn as nn
-from sslight.utils.trunc_normal import trunc_normal_
+from sslight.utils.param_utils import trunc_normal_
 
 
 def drop_path(x, drop_prob: float = 0., training: bool = False):
