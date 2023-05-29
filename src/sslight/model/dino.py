@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torchvision.models as tch_models
 
 from copy import deepcopy
 import sslight.backbone.vision_transformer as vits
@@ -60,7 +61,8 @@ class DINO(nn.Module):
             self.student = vits.__dict__[self.arch](patch_size=cfg.VIT.PATCH_SIZE, drop_path_rate=cfg.VIT.DROP_PATH_RATE)
             self.teacher = vits.__dict__[self.arch](patch_size=cfg.VIT.PATCH_SIZE,)
             self.embed_dim = self.student.embed_dim
-        elif self.arch in ['mobilenet_v2', 'resnet18', 'resnet34', 'resnet50']:
+        # elif self.arch in ['mobilenet_v2', 'resnet18', 'resnet34', 'resnet50']:
+        elif self.arch in tch_models.__dict__.keys():
             encoder = BACKBONE(cfg)
             self.embed_dim = encoder.out_channels
             self.student = deepcopy(encoder)
@@ -96,6 +98,8 @@ class DINO(nn.Module):
         self.classifier = None
         if cfg.TRAIN.JOINT_LINEAR_PROBE:
             self.classifier = nn.Linear(self.embed_dim, cfg.TRAIN.NUM_CLASSES)
+            trunc_normal_(self.classifier.weight, std=.02)
+            nn.init.constant_(self.classifier.bias, 0)
 
         self._initializes_teacher_network()
 
@@ -115,7 +119,7 @@ class DINO(nn.Module):
         # Optionally train a linear classifier on top of the detached features
         # to estimate the quality of the representation during training
         batch_size = images[0].size(0)
-        sup_logits = self.classifier(enc_feats.detach()[:batch_size].detach()) if self.classifier is not None else None
+        sup_logits = self.classifier(enc_feats.detach()[:batch_size]) if self.classifier is not None else None
         return enc_feats, sup_logits, student_output, teacher_output
         
             
