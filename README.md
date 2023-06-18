@@ -38,54 +38,63 @@ The table below includes the scripts for specific pre-training experiments:
 <th valign="bottom">Backbone</th>
 <th valign="bottom">IN1K Linear Accu.</th>
 <th valign="bottom">Training</th>  
+<th valign="bottom">Log (re-trained)</th>
 <!-- TABLE BODY -->
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">MobileNet V2</td>
       <td align="center">66.2</td>
       <td align="center"><a href=src/experiments/dino/mnv2/baseline.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/mnv2/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">MobileNet V2</td>
       <td align="center">68.3 (+2.1)</td>
       <td align="center"><a href=src/experiments/dino/mnv2/sslight.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/mnv2/sslight.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">ResNet18</td>
       <td align="center">62.2</td>
       <td align="center"><a href=src/experiments/dino/resnet18/baseline.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/resnet18/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">ResNet18</td>
       <td align="center">65.7 (+3.5)</td>
       <td align="center"><a href=src/experiments/dino/resnet18/sslight.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/resnet18/sslight.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">ResNet34</td>
       <td align="center">67.7</td>
       <td align="center"><a href=src/experiments/dino/resnet34/baseline.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/resnet34/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">ResNet34</td>
       <td align="center">69.7 (+2.0)</td>
       <td align="center"><a href=src/experiments/dino/resnet34/sslight.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/resnet34/sslight.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">ViT-Tiny/16</td>
       <td align="center">66.7</td>
       <td align="center"><a href=src/experiments/dino/vit_tiny_16/baseline.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/vit_tiny_16/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">ViT-Tiny/16</td>
       <td align="center">69.5 (+2.8)</td>
       <td align="center"><a href=src/experiments/dino/vit_tiny_16/sslight.sh>script</a></td>
+      <td align="center"><a href=src/experiments/dino/vit_tiny_16/sslight.log>log</a></td>
 </tr>
 </tbody></table> 
 
