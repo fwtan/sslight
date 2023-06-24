@@ -1,4 +1,4 @@
-# [Effective Self-supervised Pre-training on Low-compute networks without Distillation](https://arxiv.org/abs/2103.12236)
+# [Effective Self-supervised Pre-training on Low-compute networks without Distillation](https://arxiv.org/abs/2210.02808)
 Fuwen Tan, Fatemeh Saleh, Brais Martinez, ICLR 2023.
 
 ## Abstract
@@ -97,6 +97,20 @@ The table below includes the scripts for specific pre-training experiments:
       <td align="center">69.5 (+2.8)</td>
       <td align="center"><a href=src/experiments/dino/vit_tiny_16/sslight.sh>script</a></td>
       <td align="center"><a href=src/experiments/dino/vit_tiny_16/sslight.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">SWAV baseline</td>
+      <td align="center">MobileNet V2</td>
+      <td align="center">65.2</td>
+      <td align="center"><a href=src/experiments/swav/mnv2/baseline.sh>script</a></td>
+      <td align="center"><a href=src/experiments/swav/mnv2/baseline.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">SWAV SSLight</td>
+      <td align="center">MobileNet V2</td>
+      <td align="center">67/3 (+2.1)</td>
+      <td align="center"><a href=src/experiments/swav/mnv2/sslight.sh>script</a></td>
+      <td align="center"><a href=src/experiments/swav/mnv2/sslight.log>log</a></td>
 </tr>
 </tbody></table> 
 
