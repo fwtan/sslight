@@ -108,9 +108,23 @@ The table below includes the scripts for specific pre-training experiments:
 <tr>
       <td align="left">SWAV SSLight</td>
       <td align="center">MobileNet V2</td>
-      <td align="center">67/3 (+2.1)</td>
+      <td align="center">67.3 (+2.1)</td>
       <td align="center"><a href=src/experiments/swav/mnv2/sslight.sh>script</a></td>
       <td align="center"><a href=src/experiments/swav/mnv2/sslight.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">MoCo baseline</td>
+      <td align="center">MobileNet V2</td>
+      <td align="center">60.6 </td>
+      <td align="center"><a href=src/experiments/moco/mnv2/baseline.sh>script</a></td>
+      <td align="center"><a href=src/experiments/moco/mnv2/baseline.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">MoCo SSLight</td>
+      <td align="center">MobileNet V2</td>
+      <td align="center">61.6 (+1.0)</td>
+      <td align="center"><a href=src/experiments/moco/mnv2/sslight.sh>script</a></td>
+      <td align="center"><a href=src/experiments/moco/mnv2/sslight.log>log</a></td>
 </tr>
 </tbody></table> 
 
