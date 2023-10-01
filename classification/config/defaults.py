@@ -112,6 +112,7 @@ _C.DIST_URL = "env://"
 _C.WORKERS = 8
 _C.SSL_METHOD  = "BYOL"
 _C.EVAL_METHOD = "Linear" 
+_C.NUM_GPUS_PER_NODE = 8
 
 # this path works for mlp tensorboard only
 _C.TENSORBOARD_PATH = "/tensorboard"

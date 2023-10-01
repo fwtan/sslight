@@ -21,7 +21,8 @@ def run_task(cfg):
         torch.cuda.manual_seed_all(cfg.SEED)
         np.random.seed(cfg.SEED)
 
-    ngpus_per_node = torch.cuda.device_count()
+    # ngpus_per_node = torch.cuda.device_count()
+    ngpus_per_node = cfg.NUM_GPUS_PER_NODE
 
     if cfg.DISTRIBUTED:
         if cfg.DIST_URL == "env://":
