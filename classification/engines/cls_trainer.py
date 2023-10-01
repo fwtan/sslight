@@ -154,21 +154,33 @@ class CLSTrainer():
         if eval_method.lower() == 'semi':
             if 'mobilenet' in backbone_arch:
                 enc_dim = self.model.classifier.in_features
+                self.model.classifier = nn.Sequential(
+                    OrderedDict([
+                        ('fc1', nn.Linear(enc_dim, 2048)),
+                        ('bn1', nn.BatchNorm1d(2048)),
+                        ('act1', nn.GELU()),
+                        ('fc2', nn.Linear(2048, 2048)),
+                        ('bn2', nn.BatchNorm1d(2048)),
+                        ('act2', nn.GELU()),
+                        ('fc3', nn.Linear(2048, self.cfg.TRAIN.NUM_CLASSES))]
+                    )
+                )
             elif 'resnet' in backbone_arch:
                 enc_dim = self.model.fc.in_features
+                self.model.fc = nn.Sequential(
+                    OrderedDict([
+                        ('fc1', nn.Linear(enc_dim, 2048)),
+                        ('bn1', nn.BatchNorm1d(2048)),
+                        ('act1', nn.GELU()),
+                        ('fc2', nn.Linear(2048, 2048)),
+                        ('bn2', nn.BatchNorm1d(2048)),
+                        ('act2', nn.GELU()),
+                        ('fc3', nn.Linear(2048, self.cfg.TRAIN.NUM_CLASSES))]
+                    )
+                )
             else:
                 raise NotImplementedError
-            self.model.fc = nn.Sequential(
-                OrderedDict([
-                    ('fc1', nn.Linear(enc_dim, 2048)),
-                    ('bn1', nn.BatchNorm1d(2048)),
-                    ('act1', nn.GELU()),
-                    ('fc2', nn.Linear(2048, 2048)),
-                    ('bn2', nn.BatchNorm1d(2048)),
-                    ('act2', nn.GELU()),
-                    ('fc3', nn.Linear(2048, self.cfg.TRAIN.NUM_CLASSES))]
-                )
-            )
+            
         elif eval_method.lower() == 'linear':
             for param in self.model.parameters():
                 param.requires_grad = False
