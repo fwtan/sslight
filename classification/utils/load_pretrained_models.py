@@ -43,7 +43,7 @@ def load_dino_vit(path, model_keys, use_head=False):
     return state_dict
 
 
-def load_swav_cnn(path, model_keys):
+def load_swav_cnn(path, model_keys, **kwargs):
     state_dict = torch.load(path, map_location="cpu")
     if 'state_dict' in state_dict:
         state_dict = state_dict['state_dict']
@@ -59,7 +59,7 @@ def load_swav_cnn(path, model_keys):
     return state_dict
 
 
-def load_moco_cnn(path, model_keys):
+def load_moco_cnn(path, model_keys, **kwargs):
     state_dict = torch.load(path, map_location="cpu")
     if 'state_dict' in state_dict:
         state_dict = state_dict['state_dict']
