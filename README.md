@@ -129,9 +129,9 @@ The table below includes the scripts for the pre-training experiments:
 </tr>
 </tbody></table> 
 
-### Semi-supervised evaluation
+### Downstream evaluations
 
-The table below includes the scripts for the semi-supervised evaluation:
+The table below includes the scripts for semi-supervised, object detection and instance segmentation evaluations
 
 
 <table><tbody>
@@ -141,44 +141,59 @@ The table below includes the scripts for the semi-supervised evaluation:
 <th valign="bottom">Backbone</th>
 <th valign="bottom">IN1K 1%</th>
 <th valign="bottom">IN1K 10%</th>
+<th valign="bottom">CoCo Object Detection</th>
+<th valign="bottom">CoCo Instance Segmentation</th>
 <!-- TABLE BODY -->
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">ResNet18</td>
-      <td align="left">Accu. 44.5: <br/> <a href=classification/experiments/dino/resnet18/semi_1per.sh>script</a></td>
-      <td align="left">Accu. 59.2: <br/> <a href=classification/experiments/dino/resnet18/semi_10per.sh>script</a></td>
+      <td align="left">Accu.: 44.5 <br/> <a href=classification/experiments/dino/resnet18/semi_1per.sh>script</a></td>
+      <td align="left">Accu.: 59.2 <br/> <a href=classification/experiments/dino/resnet18/semi_10per.sh>script</a></td>
+      <td align="left">AP: 32.7 <br/> <a href=detection/experiments/dino/resnet18/det.sh>script</a></td>
+      <td align="left">AP: 30.6 <br/> <a href=detection/experiments/dino/resnet18/seg.sh>script</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">ResNet18</td>
-      <td align="left">Accu. 49.8 (+5.3): <br/> <a href=classification/experiments/dino/resnet18/semi_1per.sh>script</a></td>
-      <td align="left">Accu. 63.0 (+3.8): <br/> <a href=classification/experiments/dino/resnet18/semi_10per.sh>script</a></td>
+      <td align="left">Accu.: 49.8 (+5.3) <br/> <a href=classification/experiments/dino/resnet18/semi_1per.sh>script</a></td>
+      <td align="left">Accu.: 63.0 (+3.8) <br/> <a href=classification/experiments/dino/resnet18/semi_10per.sh>script</a></td>
+      <td align="left">AP: 34.1 (+1.4) <br/> <a href=detection/experiments/dino/resnet18/det.sh>script</a></td>
+      <td align="left">AP: 31.8 (+1.2) <br/> <a href=detection/experiments/dino/resnet18/seg.sh>script</a></td>
 </tr>
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">ResNet34</td>
-      <td align="left">Accu. 52.4: <br/> <a href=classification/experiments/dino/resnet34/semi_1per.sh>script</a></td>
-      <td align="left">Accu. 65.4: <br/> <a href=classification/experiments/dino/resnet34/semi_10per.sh>script</a></td>
+      <td align="left">Accu.: 52.4 <br/> <a href=classification/experiments/dino/resnet34/semi_1per.sh>script</a></td>
+      <td align="left">Accu.: 65.4 <br/> <a href=classification/experiments/dino/resnet34/semi_10per.sh>script</a></td>
+      <td align="left">AP: 37.6 <br/> <a href=detection/experiments/dino/resnet34/det.sh>script</a></td>
+      <td align="left">AP: 34.6 <br/> <a href=detection/experiments/dino/resnet34/seg.sh>script</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">ResNet34</td>
-      <td align="left">Accu. 55.2 (+2.8): <br/> <a href=classification/experiments/dino/resnet34/semi_1per.sh>script</a></td>
-      <td align="left">Accu. 67.2 (+1.8): <br/> <a href=classification/experiments/dino/resnet34/semi_10per.sh>script</a></td>
+      <td align="left">Accu.: 55.2 (+2.8) <br/> <a href=classification/experiments/dino/resnet34/semi_1per.sh>script</a></td>
+      <td align="left">Accu.: 67.2 (+1.8) <br/> <a href=classification/experiments/dino/resnet34/semi_10per.sh>script</a></td>
+      <td align="left">AP: 38.6 (+1.0): <br/> <a href=detection/experiments/dino/resnet34/det.sh>script</a></td>
+      <td align="left">AP: 35.5 (+0.9): <br/> <a href=detection/experiments/dino/resnet34/seg.sh>script</a></td>
 </tr>
 <tr>
       <td align="left">DINO baseline</td>
       <td align="center">MobileNet V2</td>
-      <td align="left">Accu. 47.9: <br/> <a href=classification/experiments/dino/mnv2/semi_1per.sh>script</a></td>
-      <td align="left">Accu. 61.3: <br/> <a href=classification/experiments/dino/mnv2/semi_10per.sh>script</a></td>
+      <td align="left">Accu.: 47.9 <br/> <a href=classification/experiments/dino/mnv2/semi_1per.sh>script</a></td>
+      <td align="left">Accu.: 61.3 <br/> <a href=classification/experiments/dino/mnv2/semi_10per.sh>script</a></td>
+      <td align="left">AP: 30.9 <br/> <a href=detection/experiments/dino/mnv2/det.sh>script</a></td>
+      <td align="left">AP: 28.1 <br/> <a href=detection/experiments/dino/mnv2/seg.sh>script</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">MobileNet V2</td>
-      <td align="left">Accu. 50.6 (+2.7): <br/> <a href=classification/experiments/dino/mnv2/semi_1per.sh>script</a></td>
-      <td align="left">Accu. 63.5 (+2.2): <br/> <a href=classification/experiments/dino/mnv2/semi_10per.sh>script</a></td>
+      <td align="left">Accu.: 50.6 (+2.7) <br/> <a href=classification/experiments/dino/mnv2/semi_1per.sh>script</a></td>
+      <td align="left">Accu.: 63.5 (+2.2) <br/> <a href=classification/experiments/dino/mnv2/semi_10per.sh>script</a></td>
+      <td align="left">AP: 32.1 (+1.2) <br/> <a href=detection/experiments/dino/mnv2/det.sh>script</a></td>
+      <td align="left">AP: 29.1 (+1.0) <br/> <a href=detection/experiments/dino/mnv2/seg.sh>script</a></td>
 </tr>
 </tbody></table> 
+
 
 ## Citing
 
