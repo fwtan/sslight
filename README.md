@@ -30,6 +30,7 @@ To assess the quality of features during pre-training, an additional linear clas
 
 Note that the accuracy of this extra classifier is typically lower than a standard linear probing evaluation.
 
+### Pretraining
 The table below includes the scripts for specific pre-training experiments:
 
 
@@ -38,95 +39,97 @@ The table below includes the scripts for specific pre-training experiments:
 <!-- TABLE HEADER -->
 <th valign="bottom">Model</th>
 <th valign="bottom">Backbone</th>
-<th valign="bottom">IN1K Linear Accu.</th>
-<th valign="bottom">Training</th>  
-<th valign="bottom">Pretrained ckpts (re-trained)</th>
+<th valign="bottom">Pre-training</th>  
+<th valign="bottom">IN1K <br/>Linear eval</th>
+<th valign="bottom">Pretrained ckpts <br/>(re-trained)</th>
 <!-- TABLE BODY -->
 <tr>
       <td align="left">DINO baseline</td>
-      <td align="center">MobileNet V2</td>
-      <td align="center">66.2</td>
-      <td align="center"><a href=src/experiments/dino/mnv2/baseline.sh>script</a></td>
-      <td align="center"><a href=https://drive.google.com/file/d/18zs2_D0uJicT01_qUlIwgtjlWNKblV27/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/mnv2/baseline.log>log</a></td>
-</tr>
-<tr>
-      <td align="left">DINO SSLight</td>
-      <td align="center">MobileNet V2</td>
-      <td align="center">68.3 (+2.1)</td>
-      <td align="center"><a href=src/experiments/dino/mnv2/sslight.sh>script</a></td>
-      <td align="center"><a href=https://drive.google.com/file/d/1M9qJgYIjUVlmPm3H34WKuvd0liKUw2O6/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/mnv2/sslight.log>log</a></td>
-</tr>
-<tr>
-      <td align="left">DINO baseline</td>
-      <td align="center">ResNet18</td>
-      <td align="center">62.2</td>
-      <td align="center"><a href=src/experiments/dino/resnet18/baseline.sh>script</a></td>
-      <td align="center"><a href=https://drive.google.com/file/d/1ZfuIcGjwFQWfk0RZHNbmdzeMVQFSAY92/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet18/baseline.log>log</a></td>
-</tr>
-<tr>
-      <td align="left">DINO SSLight</td>
-      <td align="center">ResNet18</td>
-      <td align="center">65.7 (+3.5)</td>
-      <td align="center"><a href=src/experiments/dino/resnet18/sslight.sh>script</a></td>
-      <td align="center"><a href=https://drive.google.com/file/d/1_xBGya4AWtEnHDMKHF5rL2sl0fJaMzki/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet18/sslight.log>log</a></td>
-</tr>
-<tr>
-      <td align="left">DINO baseline</td>
-      <td align="center">ResNet34</td>
-      <td align="center">67.7</td>
-      <td align="center"><a href=src/experiments/dino/resnet34/baseline.sh>script</a></td>
-      <td align="center"><a href=https://drive.google.com/file/d/1BcOgYKUzrvzrUfMaZQ8hZgqu--b5dwhS/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet34/baseline.log>log</a></td>
-</tr>
-<tr>
-      <td align="left">DINO SSLight</td>
-      <td align="center">ResNet34</td>
-      <td align="center">69.7 (+2.0)</td>
-      <td align="center"><a href=src/experiments/dino/resnet34/sslight.sh>script</a></td>
-      <td align="center"><a href=https://drive.google.com/file/d/1SZTkqscN7QAaPf_WvYPWiIvjpAeawaXL/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet34/sslight.log>log</a></td>
-</tr>
-<tr>
-      <td align="left">DINO baseline</td>
       <td align="center">ViT-Tiny/16</td>
-      <td align="center">66.7</td>
       <td align="center"><a href=src/experiments/dino/vit_tiny_16/baseline.sh>script</a></td>
+      <td align="left">Accu.: 66.7<br/> <a href=classification/experiments/dino/vit_tiny_16/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/1ZJqhW5J3_aKcdvpaPNUNwQEGwZ67G7lE/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/vit_tiny_16/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">DINO SSLight</td>
       <td align="center">ViT-Tiny/16</td>
-      <td align="center">69.5 (+2.8)</td>
       <td align="center"><a href=src/experiments/dino/vit_tiny_16/sslight.sh>script</a></td>
+      <td align="left">Accu.: 69.5 (+2.8)<br/> <a href=classification/experiments/dino/vit_tiny_16/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/15iweaPCulIbc1vCBBzUjw080ROucncCH/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/vit_tiny_16/sslight.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">DINO baseline</td>
+      <td align="center">ResNet18</td>
+      <td align="center"><a href=src/experiments/dino/resnet18/baseline.sh>script</a></td>
+      <td align="left">Accu.: 62.2<br/> <a href=classification/experiments/dino/resnet18/linear.sh>script</a></td>
+      <td align="center"><a href=https://drive.google.com/file/d/1ZfuIcGjwFQWfk0RZHNbmdzeMVQFSAY92/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet18/baseline.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">DINO SSLight</td>
+      <td align="center">ResNet18</td>
+      <td align="center"><a href=src/experiments/dino/resnet18/sslight.sh>script</a></td>
+      <td align="left">Accu.: 65.7 (+3.5)<br/> <a href=classification/experiments/dino/resnet18/linear.sh>script</a></td>
+      <td align="center"><a href=https://drive.google.com/file/d/1_xBGya4AWtEnHDMKHF5rL2sl0fJaMzki/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet18/sslight.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">DINO baseline</td>
+      <td align="center">ResNet34</td>
+      <td align="center"><a href=src/experiments/dino/resnet34/baseline.sh>script</a></td>
+      <td align="left">Accu.: 67.7<br/> <a href=classification/experiments/dino/resnet34/linear.sh>script</a></td>
+      <td align="center"><a href=https://drive.google.com/file/d/1BcOgYKUzrvzrUfMaZQ8hZgqu--b5dwhS/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet34/baseline.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">DINO SSLight</td>
+      <td align="center">ResNet34</td>
+      <td align="center"><a href=src/experiments/dino/resnet34/sslight.sh>script</a></td>
+      <td align="left">Accu.: 69.7 (+2.0)<br/> <a href=classification/experiments/dino/resnet34/linear.sh>script</a></td>
+      <td align="center"><a href=https://drive.google.com/file/d/1SZTkqscN7QAaPf_WvYPWiIvjpAeawaXL/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/resnet34/sslight.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">DINO baseline</td>
+      <td align="center">MobileNet V2</td>
+      <td align="center"><a href=src/experiments/dino/mnv2/baseline.sh>script</a></td>
+      <td align="left">Accu.: 66.2<br/> <a href=classification/experiments/dino/mnv2/linear.sh>script</a></td>
+      <td align="center"><a href=https://drive.google.com/file/d/18zs2_D0uJicT01_qUlIwgtjlWNKblV27/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/mnv2/baseline.log>log</a></td>
+</tr>
+<tr>
+      <td align="left">DINO SSLight</td>
+      <td align="center">MobileNet V2</td>
+      <td align="center"><a href=src/experiments/dino/mnv2/sslight.sh>script</a></td>
+      <td align="left">Accu.: 68.3 (+2.1)<br/> <a href=classification/experiments/dino/mnv2/linear.sh>script</a></td>
+      <td align="center"><a href=https://drive.google.com/file/d/1M9qJgYIjUVlmPm3H34WKuvd0liKUw2O6/view?usp=sharing>ckpt</a> / <a href=src/experiments/dino/mnv2/sslight.log>log</a></td>
 </tr>
 <tr>
       <td align="left">SWAV baseline</td>
       <td align="center">MobileNet V2</td>
-      <td align="center">65.2</td>
       <td align="center"><a href=src/experiments/swav/mnv2/baseline.sh>script</a></td>
+      <td align="left">Accu.: 65.2<br/> <a href=classification/experiments/dino/swav/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/1KxSCV0IdIBOnGXOErRN2EmT2wqpD2LEu/view?usp=sharing>ckpt</a> / <a href=src/experiments/swav/mnv2/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">SWAV SSLight</td>
       <td align="center">MobileNet V2</td>
-      <td align="center">67.3 (+2.1)</td>
       <td align="center"><a href=src/experiments/swav/mnv2/sslight.sh>script</a></td>
+      <td align="left">Accu.: 67.3 (+2.1)<br/> <a href=classification/experiments/swav/mnv2/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/104XnVgu0o2U7vsV1GajIDnG8r3K4L8XY/view?usp=sharing>ckpt</a> / <a href=src/experiments/swav/mnv2/sslight.log>log</a></td>
 </tr>
 <tr>
       <td align="left">MoCo baseline</td>
       <td align="center">MobileNet V2</td>
-      <td align="center">60.6 </td>
       <td align="center"><a href=src/experiments/moco/mnv2/baseline.sh>script</a></td>
+      <td align="left">Accu.: 60.6<br/> <a href=classification/experiments/moco/mnv2/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/1QoIBw3gDBqSMr2aMQQfWmEYDlT78Qki9/view?usp=sharing>ckpt</a> / <a href=src/experiments/moco/mnv2/baseline.log>log</a></td>
 </tr>
 <tr>
       <td align="left">MoCo SSLight</td>
       <td align="center">MobileNet V2</td>
-      <td align="center">61.6 (+1.0)</td>
       <td align="center"><a href=src/experiments/moco/mnv2/sslight.sh>script</a></td>
+      <td align="left">Accu.: 61.6 (+1.0)<br/> <a href=classification/experiments/moco/mnv2/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/1_5R3rGIEJV8ogdHlWzdsDyHpDQw9E5Bf/view?usp=sharing>ckpt</a> / <a href=src/experiments/moco/mnv2/sslight.log>log</a></td>
 </tr>
 </tbody></table> 
+
+### Linear evaluation
 
 ## Citing
 
