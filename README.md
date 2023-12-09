@@ -103,7 +103,7 @@ The table below includes the scripts for specific pre-training experiments:
       <td align="left">SWAV baseline</td>
       <td align="center">MobileNet V2</td>
       <td align="center"><a href=src/experiments/swav/mnv2/baseline.sh>script</a></td>
-      <td align="left">Accu.: 65.2<br/> <a href=classification/experiments/dino/swav/linear.sh>script</a></td>
+      <td align="left">Accu.: 65.2<br/> <a href=classification/experiments/swav/linear.sh>script</a></td>
       <td align="center"><a href=https://drive.google.com/file/d/1KxSCV0IdIBOnGXOErRN2EmT2wqpD2LEu/view?usp=sharing>ckpt</a> / <a href=src/experiments/swav/mnv2/baseline.log>log</a></td>
 </tr>
 <tr>
