@@ -31,7 +31,7 @@ To assess the quality of features during pre-training, an additional linear clas
 Note that the accuracy of this extra classifier is typically lower than a standard linear probing evaluation.
 
 ### Pretraining
-The table below includes the scripts for specific pre-training experiments:
+The table below includes the scripts for the pre-training experiments:
 
 
 <table><tbody>
@@ -129,7 +129,56 @@ The table below includes the scripts for specific pre-training experiments:
 </tr>
 </tbody></table> 
 
-### Linear evaluation
+### Semi-supervised evaluation
+
+The table below includes the scripts for the semi-supervised evaluation:
+
+
+<table><tbody>
+<!-- START TABLE -->
+<!-- TABLE HEADER -->
+<th valign="bottom">Model</th>
+<th valign="bottom">Backbone</th>
+<th valign="bottom">IN1K 1%</th>
+<th valign="bottom">IN1K 10%</th>
+<!-- TABLE BODY -->
+<tr>
+      <td align="left">DINO baseline</td>
+      <td align="center">ResNet18</td>
+      <td align="left">Accu. 44.5: <br/> <a href=classification/experiments/dino/resnet18/semi_1per.sh>script</a></td>
+      <td align="left">Accu. 59.2: <br/> <a href=classification/experiments/dino/resnet18/semi_10per.sh>script</a></td>
+</tr>
+<tr>
+      <td align="left">DINO SSLight</td>
+      <td align="center">ResNet18</td>
+      <td align="left">Accu. 49.8 (+5.3): <br/> <a href=classification/experiments/dino/resnet18/semi_1per.sh>script</a></td>
+      <td align="left">Accu. 63.0 (+3.8): <br/> <a href=classification/experiments/dino/resnet18/semi_10per.sh>script</a></td>
+</tr>
+<tr>
+      <td align="left">DINO baseline</td>
+      <td align="center">ResNet34</td>
+      <td align="left">Accu. 52.4: <br/> <a href=classification/experiments/dino/resnet34/semi_1per.sh>script</a></td>
+      <td align="left">Accu. 65.4: <br/> <a href=classification/experiments/dino/resnet34/semi_10per.sh>script</a></td>
+</tr>
+<tr>
+      <td align="left">DINO SSLight</td>
+      <td align="center">ResNet34</td>
+      <td align="left">Accu. 55.2 (+2.8): <br/> <a href=classification/experiments/dino/resnet34/semi_1per.sh>script</a></td>
+      <td align="left">Accu. 67.2 (+1.8): <br/> <a href=classification/experiments/dino/resnet34/semi_10per.sh>script</a></td>
+</tr>
+<tr>
+      <td align="left">DINO baseline</td>
+      <td align="center">MobileNet V2</td>
+      <td align="left">Accu. 47.9: <br/> <a href=classification/experiments/dino/mnv2/semi_1per.sh>script</a></td>
+      <td align="left">Accu. 61.3: <br/> <a href=classification/experiments/dino/mnv2/semi_10per.sh>script</a></td>
+</tr>
+<tr>
+      <td align="left">DINO SSLight</td>
+      <td align="center">MobileNet V2</td>
+      <td align="left">Accu. 50.6 (+2.7): <br/> <a href=classification/experiments/dino/mnv2/semi_1per.sh>script</a></td>
+      <td align="left">Accu. 63.5 (+2.2): <br/> <a href=classification/experiments/dino/mnv2/semi_10per.sh>script</a></td>
+</tr>
+</tbody></table> 
 
 ## Citing
 
