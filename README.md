@@ -139,10 +139,10 @@ The table below includes the scripts for semi-supervised, object detection and i
 <!-- TABLE HEADER -->
 <th valign="bottom">Model</th>
 <th valign="bottom">Backbone</th>
-<th valign="bottom">IN1K 1%</th>
-<th valign="bottom">IN1K 10%</th>
-<th valign="bottom">CoCo Object Detection</th>
-<th valign="bottom">CoCo Instance Segmentation</th>
+<th valign="bottom">IN1K <br/>Semi-sup 1%</th>
+<th valign="bottom">IN1K <br/>Semi-sup 10%</th>
+<th valign="bottom">CoCo <br/>Object Detection</th>
+<th valign="bottom">CoCo <br/>Instance Segmentation</th>
 <!-- TABLE BODY -->
 <tr>
       <td align="left">DINO baseline</td>
